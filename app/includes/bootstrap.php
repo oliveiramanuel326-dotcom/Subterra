@@ -1,4 +1,3 @@
-
 <?php
 
 /*
@@ -7,9 +6,42 @@ SUBTERRA - CONFIGURACAO GERAL
 ========================================
 */
 
-// ========================================
-// 1. CONFIGURAR SESSAO
-// ========================================
+function caminhoAplicacao(): string
+{
+    $configurado = getenv("SUBTERRA_BASE_PATH");
+
+    if ($configurado !== false) {
+        $caminho = trim($configurado, "/");
+        return $caminho === "" ? "" : "/" . $caminho;
+    }
+
+    $partes = explode(
+        "/",
+        trim(str_replace("\\", "/", $_SERVER["SCRIPT_NAME"] ?? "/index.php"), "/")
+    );
+
+    $pastasAninhadas = [
+        "auth",
+        "publicacoes",
+        "comentarios",
+        "denuncias",
+        "Denuncias",
+        "moderacao",
+        "Moderacao",
+        "api"
+    ];
+
+    $profundidade = count($partes) > 1
+        && in_array($partes[count($partes) - 2], $pastasAninhadas, true)
+            ? 2
+            : 1;
+
+    $raiz = array_slice($partes, 0, -$profundidade);
+
+    return $raiz === [] ? "" : "/" . implode("/", $raiz);
+}
+
+$caminhoAplicacao = caminhoAplicacao();
 
 if (session_status() === PHP_SESSION_NONE) {
 
@@ -24,7 +56,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     session_set_cookie_params([
         "lifetime" => 0,
-        "path" => "/Subterra/",
+        "path" => $caminhoAplicacao . "/",
         "secure" => $https,
         "httponly" => true,
         "samesite" => "Lax"
@@ -45,12 +77,7 @@ header(
 header("Pragma: no-cache");
 
 
-// ========================================
-// 3. IMPORTAR CONEXAO MYSQL
-// ========================================
-
-require_once
-    "C:/xampp/subterra-private/database.php";
+require_once __DIR__ . "/database.php";
 
 
 // ========================================
@@ -129,8 +156,10 @@ function exigirLogin()
 function redireccionar($caminho)
 {
     header(
-        "Location: /Subterra/" .
-        ltrim($caminho, "/"),
+        "Location: " .
+        $GLOBALS["caminhoAplicacao"] .
+        "/" .
+        ltrim((string) $caminho, "/"),
         true,
         303
     );

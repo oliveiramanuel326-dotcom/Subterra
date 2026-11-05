@@ -13,35 +13,7 @@ COLLATE utf8mb4_unicode_ci;
 USE subterra_app;
 
 
--- 2. CONFIGURAR UTILIZADOR MYSQL
-
-CREATE USER IF NOT EXISTS
-'subterra_user'@'localhost'
-IDENTIFIED BY '123';
-
-ALTER USER 'subterra_user'@'localhost'
-IDENTIFIED BY '123';
-
-CREATE USER IF NOT EXISTS
-'subterra_user'@'127.0.0.1'
-IDENTIFIED BY '123';
-
-ALTER USER 'subterra_user'@'127.0.0.1'
-IDENTIFIED BY '123';
-
-
--- 3. CONCEDER PERMISSOES
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-ON subterra_app.*
-TO 'subterra_user'@'localhost';
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-ON subterra_app.*
-TO 'subterra_user'@'127.0.0.1';
-
-
--- 4. TABELA DE UTILIZADORES
+-- 2. TABELA DE UTILIZADORES
 
 CREATE TABLE IF NOT EXISTS usuarios (
 
@@ -63,7 +35,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 ) ENGINE=InnoDB;
 
 
--- 5. TABELA DE PUBLICACOES
+-- 3. TABELA DE PUBLICACOES
 
 CREATE TABLE IF NOT EXISTS publicacoes (
 
@@ -95,7 +67,7 @@ CREATE TABLE IF NOT EXISTS publicacoes (
 ) ENGINE=InnoDB;
 
 
--- 6. TABELA DE COMENTARIOS
+-- 4. TABELA DE COMENTARIOS
 
 CREATE TABLE IF NOT EXISTS comentarios (
 
@@ -120,7 +92,7 @@ CREATE TABLE IF NOT EXISTS comentarios (
 ) ENGINE=InnoDB;
 
 
--- 7. TABELA DE VOTOS
+-- 5. TABELA DE VOTOS
 
 CREATE TABLE IF NOT EXISTS votos (
 
@@ -130,10 +102,15 @@ CREATE TABLE IF NOT EXISTS votos (
 
     usuario_id BIGINT UNSIGNED NOT NULL,
 
+    valor TINYINT NOT NULL DEFAULT 1,
+
     UNIQUE KEY voto_unico (
         publicacao_id,
         usuario_id
     ),
+
+    CONSTRAINT voto_valor_valido
+        CHECK (valor IN (-1, 1)),
 
     FOREIGN KEY (publicacao_id)
         REFERENCES publicacoes(id)
@@ -145,7 +122,7 @@ CREATE TABLE IF NOT EXISTS votos (
 ) ENGINE=InnoDB;
 
 
--- 8. TABELA DE MENSAGENS
+-- 6. TABELA DE MENSAGENS
 
 CREATE TABLE IF NOT EXISTS mensagens (
 
@@ -164,7 +141,7 @@ CREATE TABLE IF NOT EXISTS mensagens (
 ) ENGINE=InnoDB;
 
 
--- 9. TABELA DE DENUNCIAS
+-- 7. TABELA DE DENUNCIAS
 
 CREATE TABLE IF NOT EXISTS denuncias (
 
@@ -181,6 +158,11 @@ CREATE TABLE IF NOT EXISTS denuncias (
         'resolvida'
     ) NOT NULL DEFAULT 'pendente',
 
+    UNIQUE KEY denuncia_unica (
+        publicacao_id,
+        usuario_id
+    ),
+
     criado_em TIMESTAMP
         DEFAULT CURRENT_TIMESTAMP,
 
@@ -193,19 +175,12 @@ CREATE TABLE IF NOT EXISTS denuncias (
 ) ENGINE=InnoDB;
 
 
--- 10. VERIFICAR AS TABELAS
+-- 8. VERIFICAR AS TABELAS
 
 SHOW TABLES;
 
 
--- 11. VERIFICAR UTILIZADORES MYSQL
-
-SELECT user, host
-FROM mysql.user
-WHERE user = 'subterra_user';
-
-
--- 12. VERIFICAR SERVIDOR E BASE DE DADOS
+-- 9. VERIFICAR SERVIDOR E BASE DE DADOS
 
 SELECT
     @@hostname AS servidor,
@@ -213,7 +188,7 @@ SELECT
     DATABASE() AS base_dados;
 
 
--- 13. CONSULTAR UTILIZADORES REGISTADOS
+-- 10. CONSULTAR UTILIZADORES REGISTADOS
 
 SELECT
     id,
@@ -224,7 +199,7 @@ FROM usuarios
 ORDER BY id DESC;
 
 
--- 14. VERIFICAR ESTRUTURA DA TABELA
+-- 11. VERIFICAR ESTRUTURA DA TABELA
 
 DESCRIBE usuarios;
 

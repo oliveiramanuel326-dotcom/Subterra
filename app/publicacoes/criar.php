@@ -1,8 +1,9 @@
-
 <?php
 
 require_once __DIR__ .
     "/../includes/publicacoes.php";
+require_once __DIR__ .
+    "/../includes/algoritmos.php";
 
 exigirLogin();
 
@@ -45,6 +46,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($erro === "") {
 
             try {
+                $moderacao = moderarTextoComAlgoritmos($conteudo);
+
+                if (($moderacao["result"] ?? "") !== "APROVADO") {
+                    $erro = match ($moderacao["result"] ?? "") {
+                        "CURTO_DEMAIS" =>
+                            "A publicacao deve ter pelo menos 25 palavras.",
+                        "SPAM" =>
+                            "A publicacao foi sinalizada como spam.",
+                        "DUPLICADO" =>
+                            "Esta publicacao ja foi enviada recentemente.",
+                        "PROIBIDO" =>
+                            "A publicacao contem termos bloqueados pela moderacao.",
+                        default =>
+                            "A publicacao nao passou pela moderacao."
+                    };
+                }
+
+                if ($erro !== "") {
+                    throw new DomainException($erro);
+                }
 
                 $conexao = conectarBD();
 
@@ -87,15 +108,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 redireccionar("feed.php");
 
+            } catch (DomainException $ex) {
+                $erro = $ex->getMessage();
+            } catch (SubterraAlgorithmException $ex) {
+                error_log("[SUBTERRA ALGORITMOS] " . $ex->getMessage());
+                $erro = "O servico de algoritmos esta indisponivel. Tenta novamente.";
             } catch (PDOException $ex) {
+                error_log("[SUBTERRA CRIAR] " . $ex->getMessage());
+                $erro = "Nao foi possivel criar a publicacao.";
+            } catch (Throwable $ex) {
 
                 error_log(
                     "[SUBTERRA CRIAR] " .
                     $ex->getMessage()
                 );
 
-                $erro = "Nao foi possivel "
-                      . "criar a publicacao.";
+                $erro = "Nao foi possivel criar a publicacao.";
             }
         }
     }
@@ -246,7 +274,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ><?= escapar($conteudo) ?></textarea>
 
             <small>
-                Maximo de 5000 caracteres.
+                Entre 25 palavras e 5000 caracteres. A moderacao automatica
+                verifica tamanho, links e repeticoes.
             </small>
 
         </div>

@@ -1,4 +1,3 @@
-
 <?php
 
 require_once __DIR__ . "/../includes/moderacao.php";
@@ -6,6 +5,10 @@ require_once __DIR__ . "/../includes/moderacao.php";
 exigirModerador();
 
 $mensagem = obterMensagem();
+$cmsUrl = rtrim(
+    getenv("SUBTERRA_CMS_URL") ?: "http://127.0.0.1:8055",
+    "/"
+);
 
 $denuncias = [];
 $publicacoesOcultas = [];
@@ -143,6 +146,15 @@ try {
                 strtoupper($_SESSION["papel"] ?? "")
             ) ?>
         </div>
+
+        <a
+            class="btn btn-outline btn-small"
+            href="<?= escapar($cmsUrl) ?>"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Abrir CMS Directus
+        </a>
 
     </section>
 

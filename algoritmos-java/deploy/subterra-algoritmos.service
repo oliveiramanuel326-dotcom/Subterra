@@ -1,0 +1,32 @@
+[Unit]
+Description=Subterra Java algorithm service
+After=network.target
+
+[Service]
+Type=simple
+User=subterra
+Group=subterra
+WorkingDirectory=/opt/subterra
+ExecStart=/usr/bin/java -Xmx512m -jar /opt/subterra/subterra-algoritmos.jar
+Environment=SUBTERRA_ALGORITHM_PORT=8787
+EnvironmentFile=-/etc/subterra/algoritmos.env
+Restart=on-failure
+RestartSec=3
+
+CPUQuota=150%
+MemoryMax=768M
+TasksMax=64
+LimitNOFILE=4096
+
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+NoNewPrivileges=yes
+RestrictNamespaces=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

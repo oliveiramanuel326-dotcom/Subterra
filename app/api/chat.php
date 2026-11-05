@@ -1,7 +1,6 @@
-
 <?php
 
-require_once __DIR__ . "/../includes/publicacoes.php";
+require_once __DIR__ . "/../includes/algoritmos.php";
 
 header("Content-Type: application/json; charset=utf-8");
 header("Cache-Control: no-store");
@@ -159,23 +158,10 @@ try {
 
     $usuarioId = (int) $_SESSION["usuario_id"];
 
-    // Limite simples contra envio excessivo:
-    // no maximo 6 mensagens por minuto.
-    $stmt = $conexao->prepare("
-        SELECT COUNT(*)
-        FROM mensagens
-        WHERE usuario_id = :usuario_id
-          AND criado_em >= NOW() - INTERVAL 1 MINUTE
-    ");
-
-    $stmt->execute([
-        ":usuario_id" => $usuarioId
-    ]);
-
-    if ((int) $stmt->fetchColumn() >= 6) {
+    if (!permitirMensagemComAlgoritmos($usuarioId)) {
         respostaChat(429, [
             "ok" => false,
-            "erro" => "Limite de mensagens atingido. Aguarda um minuto."
+            "erro" => "Limite de mensagens atingido. Aguarda alguns segundos."
         ]);
     }
 
@@ -196,7 +182,15 @@ try {
         "mensagem" => "Mensagem enviada."
     ]);
 
-} catch (PDOException $ex) {
+} catch (SubterraAlgorithmException $ex) {
+    error_log("[SUBTERRA ALGORITMOS CHAT] " . $ex->getMessage());
+
+    respostaChat(503, [
+        "ok" => false,
+        "erro" => "O servico de mensagens esta temporariamente indisponivel."
+    ]);
+
+} catch (Throwable $ex) {
 
     error_log(
         "[SUBTERRA CHAT API] " .

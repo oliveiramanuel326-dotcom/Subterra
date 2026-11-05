@@ -1,4 +1,3 @@
-
 <?php
 
 require_once __DIR__ . "/includes/bootstrap.php";
@@ -36,6 +35,10 @@ require_once __DIR__ . "/includes/bootstrap.php";
 
             <a class="nav-link" href="feed.php">
                 Feed
+            </a>
+
+            <a class="nav-link" href="chat.php">
+                Chat
             </a>
 
         <?php else: ?>
@@ -115,26 +118,26 @@ require_once __DIR__ . "/includes/bootstrap.php";
 
         <div class="painel-cabecalho">
 
-            <span>SUBTERRA / SISTEMA</span>
+            <span>&gt; SUBTERRA / SESSAO ANONIMA</span>
 
-            <span>v0.2</span>
+            <span>/b/</span>
 
         </div>
 
         <h2>Uma identidade privada.</h2>
 
         <p class="painel-descricao">
-            A SUBTERRA permite participar
-            na comunidade sem apresentar
-            publicamente o pseudonimo
-            associado a cada publicacao.
+            As publicacoes e conversas aparecem
+            sem o pseudonimo do autor. A conta
+            continua privada e permite moderar
+            a comunidade.
         </p>
 
         <div class="system-line">
 
             <span class="ponto"></span>
 
-            Sistema de autenticacao disponivel
+            PUBLICACOES SEM AUTORIA VISIVEL
 
         </div>
 
@@ -150,57 +153,49 @@ require_once __DIR__ . "/includes/bootstrap.php";
 
         <div class="grelha">
 
-            <article class="modulo">
+            <a class="modulo" href="feed.php">
 
-                <h3>01 / Identidade</h3>
-
-                <p>
-                    Registo, login, passwords
-                    protegidas e sessoes privadas.
-                </p>
-
-                <span>ETAPA 2</span>
-
-            </article>
-
-            <article class="modulo">
-
-                <h3>02 / Publicacoes</h3>
+                <h3>01 / Publicacoes</h3>
 
                 <p>
-                    Feed anonimo, comentarios
-                    e interaccoes.
+                    Entra no feed, encontra conversas
+                    e publica sem mostrar o teu pseudonimo.
                 </p>
 
-                <span>PROXIMA ETAPA</span>
+                <span>ABRIR FEED →</span>
 
-            </article>
+            </a>
 
-            <article class="modulo">
+            <a class="modulo" href="feed.php">
 
-                <h3>03 / Comunidade</h3>
+                <h3>02 / Conversas</h3>
 
                 <p>
-                    Chat, categorias, regras
-                    e moderacao.
+                    Partilha ideias, comenta e vota
+                    nas publicacoes da comunidade.
                 </p>
 
-                <span>EM DESENVOLVIMENTO</span>
+                <span>VER CONVERSAS →</span>
 
-            </article>
+            </a>
 
-            <article class="modulo">
+            <a class="modulo" href="<?= estaAutenticado()
+                ? "publicacoes/criar.php"
+                : "auth/registo.php" ?>">
 
-                <h3>04 / Inteligencia</h3>
+                <h3>03 / Participar</h3>
 
                 <p>
-                    Algoritmos Java de ranking,
-                    classificacao e grafos.
+                    <?= estaAutenticado()
+                        ? "Abre uma nova publicacao para a comunidade."
+                        : "Cria uma conta para publicar, comentar e votar." ?>
                 </p>
 
-                <span>EM DESENVOLVIMENTO</span>
+                <span><?= estaAutenticado()
+                    ? "NOVA PUBLICACAO →"
+                    : "CRIAR CONTA →" ?></span>
 
-            </article>
+            </a>
 
         </div>
 

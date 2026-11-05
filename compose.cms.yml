@@ -1,0 +1,21 @@
+services:
+  directus:
+    image: directus/directus:11
+    container_name: subterra-cms
+    restart: unless-stopped
+    network_mode: host
+    env_file:
+      - .env.cms
+    environment:
+      HOST: 127.0.0.1
+      PORT: "8055"
+      PUBLIC_URL: http://127.0.0.1:8055
+      STORAGE_LOCATIONS: local
+      STORAGE_LOCAL_ROOT: /directus/uploads
+    volumes:
+      - subterra_cms_uploads:/directus/uploads
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  subterra_cms_uploads:

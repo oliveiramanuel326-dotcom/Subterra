@@ -1,4 +1,3 @@
-
 <?php
 
 require_once __DIR__ . "/includes/moderacao.php";
@@ -51,7 +50,7 @@ $podeModerar = eModerador();
 
             <a
                 class="nav-link"
-                href="moderacao/index.php"
+                href="Moderacao/index.php"
             >
                 Moderacao
             </a>

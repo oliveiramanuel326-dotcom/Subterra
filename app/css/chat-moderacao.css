@@ -1,315 +1,209 @@
-
-/* ======================================
-   SUBTERRA - ETAPA 5
-   CHAT E MODERACAO
-====================================== */
-
-/* CHAT - ESTRUTURA */
-
-.chat-shell {
-    width: min(100% - 40px, 980px);
-    margin: 55px auto 90px;
+.chat-intro,
+.mod-heading {
+    margin-bottom: 22px;
 }
 
-.chat-intro {
-    margin-bottom: 30px;
+.chat-intro h1,
+.mod-heading h1 {
+    margin: 0 0 10px;
+    font-size: clamp(29px, 5vw, 40px);
 }
 
-.chat-intro h1 {
-    margin: 12px 0;
-    font-size: clamp(30px, 5vw, 44px);
-    line-height: 1.2;
-}
-
-.chat-intro > p:not(.etiqueta) {
-    max-width: 650px;
-    color: #99a6a9;
-    font-size: 14px;
-    line-height: 1.8;
+.chat-intro > p:not(.etiqueta),
+.mod-heading > p:not(.etiqueta) {
+    max-width: 680px;
+    margin: 0;
+    color: var(--secundario);
 }
 
 .chat-status {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 20px;
-    color: #85b9a4;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    letter-spacing: 1px;
+    gap: 8px;
+    margin-top: 14px;
+    color: var(--verde);
+    font: 700 11px "Courier New", monospace;
 }
-
-/* JANELA DO CHAT */
 
 .chat-panel {
     overflow: hidden;
-    background: #12171b;
-    border: 1px solid #2b363a;
-    border-radius: 12px;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
 }
 
 .chat-panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    padding: 23px 25px;
-    border-bottom: 1px solid #2b363a;
+    padding: 14px 17px;
+    border-bottom: 1px solid var(--borda);
 }
 
 .chat-panel-header h2 {
-    color: #eef2f1;
-    font-size: 17px;
-    margin-bottom: 6px;
+    margin: 0 0 3px;
+    font-size: 16px;
 }
 
 .chat-panel-header p {
-    color: #91a0a2;
-    font-size: 12px;
-}
-
-.chat-room-label {
-    color: #85b9a4;
-    font-family: "IBM Plex Mono", monospace;
+    margin: 0;
+    color: var(--secundario);
     font-size: 11px;
 }
 
-/* LISTA DE MENSAGENS */
+.chat-room-label {
+    color: var(--verde);
+    font: 700 11px "Courier New", monospace;
+}
 
 .chat-messages {
     height: min(58vh, 530px);
     min-height: 280px;
-    padding: 24px;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 13px;
-    scrollbar-color: #42544e #12171b;
+    gap: 8px;
+    padding: 16px;
+    overflow-y: auto;
+    scrollbar-color: #555e68 var(--superficie);
 }
 
 .chat-placeholder {
     margin: auto;
-    color: #91a0a2;
+    color: var(--secundario);
     text-align: center;
     font-size: 13px;
 }
 
 .chat-message {
-    padding: 16px;
-    background: #191f23;
-    border: 1px solid #2b363a;
-    border-radius: 9px;
+    padding: 11px 13px;
+    background: var(--fundo);
+    border: 1px solid var(--borda);
 }
 
 .chat-message-meta {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 8px;
+    margin-bottom: 7px;
 }
 
 .chat-message-meta strong {
-    color: #85b9a4;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 1px;
+    color: var(--verde);
+    font: 700 10px "Courier New", monospace;
 }
 
 .chat-message-meta time {
-    color: #91a0a2;
-    font-size: 10px;
+    color: var(--secundario);
+    font: 10px "Courier New", monospace;
 }
 
 .chat-message-text {
-    color: #e5ebea;
-    font-size: 13px;
-    line-height: 1.8;
+    margin: 0;
+    line-height: 1.6;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
-/* FORMULARIO DO CHAT */
-
 .chat-compose {
-    padding: 22px 25px;
-    border-top: 1px solid #2b363a;
+    padding: 16px 17px;
+    border-top: 1px solid var(--borda);
 }
 
 .chat-compose form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 9px;
 }
 
 .chat-compose label {
-    color: #b4c2c1;
     font-size: 12px;
-    font-weight: 600;
 }
 
 .chat-compose textarea {
-    width: 100%;
-    min-height: 95px;
-    resize: vertical;
-    line-height: 1.7;
+    min-height: 80px;
 }
 
 .chat-compose-bottom {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 10px;
 }
 
 .chat-compose-bottom span {
-    color: #91a0a2;
-    font-size: 11px;
-}
-
-/* DENUNCIAS NO FEED */
-
-.report-disclosure {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #2b363a;
-}
-
-.report-disclosure summary {
-    width: fit-content;
-    color: #a7b5b4;
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.report-disclosure summary:hover {
-    color: #e79a9a;
-}
-
-.report-form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    margin-top: 17px;
-}
-
-.report-form label {
-    color: #b4c2c1;
-    font-size: 12px;
-}
-
-.report-form textarea {
-    width: 100%;
-    min-height: 85px;
-    resize: vertical;
-    line-height: 1.6;
-}
-
-/* PAINEL DE MODERACAO */
-
-.mod-shell {
-    width: min(100% - 40px, 1000px);
-    margin: 55px auto 90px;
-}
-
-.mod-heading {
-    margin-bottom: 40px;
-}
-
-.mod-heading h1 {
-    margin: 12px 0;
-    font-size: clamp(30px, 5vw, 42px);
-}
-
-.mod-heading > p:not(.etiqueta) {
-    color: #99a6a9;
-    font-size: 14px;
-    line-height: 1.8;
+    color: var(--secundario);
+    font: 11px "Courier New", monospace;
 }
 
 .mod-role {
     width: fit-content;
-    margin-top: 20px;
-    padding: 9px 13px;
-    background: #1b2b25;
-    border: 1px solid #355746;
-    border-radius: 6px;
-    color: #85b9a4;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
+    padding: 6px 9px;
+    margin-top: 14px;
+    background: #292e24;
+    border: 1px solid #59683d;
+    color: #c0cf9d;
+    font: 700 11px "Courier New", monospace;
 }
 
 .mod-section {
-    margin-top: 38px;
+    margin-top: 30px;
 }
 
 .mod-section-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 18px;
+    padding-bottom: 9px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--borda);
 }
 
 .mod-section-heading h2 {
-    color: #eef2f1;
-    font-size: 19px;
+    margin: 0;
+    font-size: 18px;
 }
 
 .mod-section-heading span {
-    color: #91a0a2;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px;
+    color: var(--secundario);
+    font: 11px "Courier New", monospace;
+}
+
+.mod-empty,
+.mod-card {
+    padding: 16px;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
 }
 
 .mod-empty {
-    padding: 30px;
-    background: #12171b;
-    border: 1px solid #2b363a;
-    border-radius: 9px;
-    color: #91a0a2;
-    font-size: 13px;
+    color: var(--secundario);
     text-align: center;
 }
 
 .mod-card {
-    padding: 23px;
-    margin-bottom: 13px;
-    background: #12171b;
-    border: 1px solid #2b363a;
-    border-radius: 9px;
+    margin-bottom: 10px;
 }
 
 .mod-card-meta {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 15px;
-    color: #85b9a4;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: var(--verde);
+    font: 700 10px "Courier New", monospace;
 }
 
 .mod-card h3 {
-    color: #eef2f1;
-    font-size: 16px;
-    margin-bottom: 12px;
+    margin: 0 0 8px;
+    color: var(--azul);
+    font-size: 15px;
 }
 
 .mod-card-status {
-    margin-bottom: 12px;
-    color: #91a0a2;
+    margin: 0 0 9px;
+    color: var(--secundario);
     font-size: 12px;
 }
 
 .mod-reason {
-    color: #c6d1cf;
-    font-size: 13px;
-    line-height: 1.8;
+    margin: 0;
+    line-height: 1.6;
     overflow-wrap: anywhere;
 }
 
@@ -317,27 +211,28 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 8px;
+    margin-top: 13px;
 }
 
-/* RESPONSIVIDADE */
+.mod-actions form {
+    margin: 0;
+}
 
 @media (max-width: 650px) {
-
-    .chat-shell,
-    .mod-shell {
-        margin-top: 30px;
-    }
-
     .chat-panel-header,
     .chat-compose {
-        padding: 17px;
+        padding: 13px;
     }
 
     .chat-messages {
-        padding: 15px;
-        min-height: 300px;
+        min-height: 250px;
+        padding: 12px;
+    }
+
+    .chat-compose-bottom,
+    .chat-compose-bottom .btn {
+        width: 100%;
     }
 
     .chat-compose-bottom {
@@ -345,20 +240,18 @@
         flex-direction: column;
     }
 
-    .chat-compose-bottom button {
-        width: 100%;
+    .mod-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     .mod-card {
-        padding: 17px;
+        padding: 13px;
     }
 
-    .mod-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .mod-actions button {
+    .mod-actions,
+    .mod-actions form,
+    .mod-actions .btn {
         width: 100%;
     }
 }
